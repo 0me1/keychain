@@ -6,10 +6,7 @@ from card_manager import get_in_card
 from search import current
 
 
-def general_options(page: app.Page):
-    page.title = "Test Keychain"
-    page.horizontal_alignment = app.CrossAxisAlignment.CENTER
-    page.update()
+cards_container = app.Column(spacing=10, expand=True, scroll=app.ScrollMode.AUTO)
 
 
 def appbar(page: app.Page, search_bar):
@@ -33,6 +30,3 @@ def bottom_appbar(page: app.Page):
     page.update()
 
 
-# def body():
-#     col = app.Column(spacing=10, expand=True, controls=get(), scroll=app.ScrollMode.ALWAYS, on_scroll_interval=0)
-#     return col1

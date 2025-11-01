@@ -5,7 +5,9 @@ from search import *
 
 
 def main(page: app.Page):
-    general_options(page)
+    page.title = "Test Keychain"
+    page.horizontal_alignment = app.CrossAxisAlignment.CENTER
+    
     appbar(page, current(page))
     bottom_appbar(page)
     current(page)

@@ -24,6 +24,7 @@ FILTRATED_CARDS_LIST = []
 
 
 def load():
+    global CARDS_LIST
     path = f"{DATA_PATH}/data.json"
     cards = []
 
@@ -62,7 +63,6 @@ def filter_card(key: str):
 
 
 def get_in_card():
-    print("ты в гет")
     cards = []
     fcards = []
     print(CARDS_LIST, FILTRATED_CARDS_LIST)
