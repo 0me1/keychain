@@ -6,8 +6,6 @@ from card_manager import get_in_card
 from search import current
 
 
-cards_container = app.Column(spacing=10, expand=True, scroll=app.ScrollMode.AUTO)
-
 
 def appbar(page: app.Page, search_bar):
     page.appbar = app.AppBar(
@@ -28,5 +26,7 @@ def bottom_appbar(page: app.Page):
         ),
     )
     page.update()
+
+
 
 

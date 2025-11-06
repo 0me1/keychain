@@ -12,7 +12,7 @@ class Card_Model(BaseModel):
     login: str
     password: str
 
-CARDS_LIST = [Card_Model(service="mail", login="2mlogin", password="12345"), Card_Model(service="google", login="3mlogin", password="12345")]
+CARDS_LIST = []
 FILTRATED_CARDS_LIST = []
 
 
@@ -47,12 +47,8 @@ def filter_card(key: str):
     global CARDS_LIST, FILTRATED_CARDS_LIST
     key = key.strip()
 
-    if len(key) < 3: return
-
     def s(c):
-        login = c.login
-        service = c.service
-        if key in login or key in service:
+        if key in c.login or key in c.service:
             return True
         else: return False
 
@@ -65,12 +61,12 @@ def filter_card(key: str):
 def get_in_card():
     cards = []
     fcards = []
-    print(CARDS_LIST, FILTRATED_CARDS_LIST)
+    # print(CARDS_LIST, FILTRATED_CARDS_LIST)
     for i in CARDS_LIST:
-        cards.append(Card(service_name=i.service, login=i.login))
+        cards.append(Card(service_name=i.service, login=i.login, pwd=i.password))
     
     for i in FILTRATED_CARDS_LIST:
-        fcards.append(Card(service_name=i.service, login=i.login))
+        fcards.append(Card(service_name=i.service, login=i.login, pwd=i.password))
     
     return (cards, fcards)
 
@@ -81,5 +77,3 @@ def add_card():
 
 def remove_card():
     ...
-
-
