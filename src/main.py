@@ -19,36 +19,37 @@ class CardItem(BaseModel):
 
 # storage
 
-# DATA_PATH = os.getenv("FLET_APP_STORAGE_DATA")
+DATA_PATH = "./local_storage/"
+os.makedirs(DATA_PATH, exist_ok=True)
 
 class Pull():
-    # @staticmethod
-    # def get() -> list[CardItem]:
-    #     path = os.path.join(DATA_PATH, "data.json") #type: ignore
+    @staticmethod
+    def get() -> list[CardItem]:
+        path = os.path.join(DATA_PATH, "data.json") #type: ignore
 
-    #     with open(path, 'r', encoding="utf-8") as file:
-    #         data = json.load(file)
-    #         result = [CardItem(**p) for p in data]
+        with open(path, 'r', encoding="utf-8") as file:
+            data = json.load(file)
+            result = [CardItem(**p) for p in data]
         
-    #     return result
+        return result
 
              
+    @staticmethod
+    def set(data: list[CardItem]):
+        path = os.path.join(DATA_PATH, "data.json") #type: ignore
+        with open(path, 'w', encoding="utf-8") as file:
+            json.dump([p.model_dump() for p in data], file, indent=4)
+
     # @staticmethod
-    # def set(data: list[CardItem]):
-    #     path = os.path.join(DATA_PATH, "data.json") #type: ignore
-    #     with open(path, 'w', encoding="utf-8") as file:
-    #         json.dump([p.model_dump() for p in data], file, indent=4)
+    # def set(page: app.Page, data: list[CardItem]):
+    #     page.client_storage.set(key="1", value=data)
 
-    @staticmethod
-    def set(page: app.Page, data: list[CardItem]):
-        page.client_storage.set(key="1", value=data)
+    # @staticmethod
+    # def get(page: app.Page):
+    #     data = page.client_storage.get("1")
+    #     result = [CardItem(**p) for p in data] #type: ignore
 
-    @staticmethod
-    def get(page: app.Page):
-        data = page.client_storage.get("1")
-        result = [CardItem(**p) for p in data] #type: ignore
-
-        return result
+    #     return result
 
 
 active_card = CardItem(service="1", login="1", password="1")
@@ -61,8 +62,8 @@ def main(page: app.Page):
     page.spacing = 0
 
     try:
-        cards_data = Pull.get(page)
-    except:
+        cards_data = Pull.get()
+    except Exception:
         cards_data = [CardItem(service="Placeholder", login="Placeholder", password="Placeholder",)]
     
 
@@ -93,13 +94,13 @@ def main(page: app.Page):
                     content=app.Row(
                         # alignment=app.MainAxisAlignment.SPACE_BETWEEN,
                         controls=[
-                            app.Icon(name=app.Icons.EURO_SYMBOL, size=50),
+                            app.Container(app.Column([app.Text(f"{card.service[0]}", size=40, scale=1.5, color=app.Colors.SURFACE_TINT)]), width=60, alignment=app.alignment.top_center),
                             app.Column(controls=[
                                 app.Text(card.service, size=20),
                                 app.Text(card.login),
                             ], expand=True, spacing=0),
                             app.Icon(name=app.Icons.ARROW_FORWARD_IOS)
-                        ], spacing=20
+                        ], spacing=5
                     )
                 )
             )
@@ -123,7 +124,7 @@ def main(page: app.Page):
                         password=password_field.value.strip() or "Нет пароля" #type: ignore
                     )),
                     search(),
-                    Pull.set(page, cards_data),
+                    Pull.set(cards_data),
                     page.close(dlg)
                 )),
             ],
@@ -246,13 +247,13 @@ def main(page: app.Page):
     def change_card():
         index = cards_data.index(active_card)
         cards_data[index] = CardItem(service=service_field.value, login=login_field.value, password=password_field.value) #type: ignore
-        Pull.set(page, cards_data)
+        Pull.set(cards_data)
         open_detail(cards_data[index])
 
     def delete_card():
         index = cards_data.index(active_card)
         cards_data.pop(index)
-        Pull.set(page, cards_data)
+        Pull.set(cards_data)
         show_main()
 
 
